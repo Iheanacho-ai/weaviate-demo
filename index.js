@@ -6,27 +6,41 @@ const client = weaviate.client({
 });
 
 var classObj = {
-    "class": "Article",
-    "description": "A written text, for example a news article or blog post",
-    "vectorizeClassName": true,
+    "class": "Paragraph",
+    "description": "A blog post",
+    "moduleConfig": {
+        "text2vec-transformers": {
+            "vectorizeClassName": false
+        }
+    },
     "properties": [
         {
-        "dataType": [
-            "string"
-        ],
-        "description": "Title of the article",
-        "name": "title",
-        "vectorizePropertyName": true,
-        "index": true
-        },
-        {
+        "name": "content",
         "dataType": [
             "text"
         ],
-        "description": "The content of the article",
-        "name": "content"
-        }
-    ]
+        "moduleConfig": {
+            "text2vec-transformers": {
+            "skip": false,
+            "vectorizePropertyName": false
+            }
+        },
+        "description": "text property for paragraph",
+        },
+        {
+         "name": "inArticle",
+         "dataType": [
+            "Article"
+         ],
+        "moduleConfig": {
+            "text2vec-transformers": {
+            "skip": true,
+            "vectorizePropertyName": false
+            }
+        },
+        "description": "text property for document",
+        },
+     ]
 }
 
 client
