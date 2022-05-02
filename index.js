@@ -6,41 +6,108 @@ const client = weaviate.client({
 });
 
 var classObj = {
-    "class": "Paragraph",
-    "description": "A blog post",
-    "moduleConfig": {
-        "text2vec-transformers": {
-            "vectorizeClassName": false
-        }
+  "classes": [
+    {
+        "class": "Articles",
+        "description": "A wikipedia article with a title and crefs",
+        "vectorizer": "none",
+        "vectorIndexConfig": {
+            "skip": true
+        },
+        "properties": [
+            {
+                "dataType": [
+                    "string"
+                ],
+                "description": "Title of the article",
+                "name": "title",
+                "indexInverted": true
+            },
+            {
+                "dataType": [
+                    "Paragraph"
+                ],
+                "description": "List of paragraphs this article has",
+                "name": "hasParagraphs",
+                "indexInverted": true
+            },
+            {
+                "dataType": [
+                    "Article"
+                ],
+                "description": "Articles this page links to",
+                "name": "linksToArticles",
+                "indexInverted": true
+            }
+        ]
     },
-    "properties": [
-        {
-        "name": "content",
-        "dataType": [
-            "text"
-        ],
-        "moduleConfig": {
-            "text2vec-transformers": {
-            "skip": false,
-            "vectorizePropertyName": false
+    {
+        "class": "Paragraphs",
+        "description": "A wiki paragraph",
+        "vectorIndexConfig": {
+            "vectorCacheMaxObjects": 150000000000,
+            "ef": 2500
+        },
+        "properties": [
+            {
+                "dataType": [
+                    "string"
+                ],
+                "description": "Title of the paragraph",
+                "name": "title",
+                "indexInverted": false,
+                "moduleConfig": {
+                    "text2vec-transformers": {
+                        "skip": true,
+                        "vectorizePropertyName": false,
+                    }
+                }
+            },
+            {
+                "dataType": [
+                    "text"
+                ],
+                "description": "The content of the paragraph",
+                "name": "content",
+                "indexInverted": false,
+                "moduleConfig": {
+                    "text2vec-transformers": {
+                        "skip": false,
+                        "vectorizePropertyName": false,
+                    }
+                }
+            },
+            {
+                "dataType": [
+                    "int"
+                ],
+                "description": "Order of the paragraph",
+                "name": "order",
+                "indexInverted": true,
+                "moduleConfig": {
+                    "text2vec-transformers": {
+                        "skip": true,
+                        "vectorizePropertyName": false,
+                    }
+                }
+            },
+            {
+                "dataType": [
+                    "Article"
+                ],
+                "description": "Article this paragraph is in",
+                "name": "inArticle",
+                "moduleConfig": {
+                    "text2vec-transformers": {
+                        "skip": true,
+                        "vectorizePropertyName": false,
+                    }
+                }
             }
-        },
-        "description": "text property for paragraph",
-        },
-        {
-         "name": "inArticle",
-         "dataType": [
-            "Article"
-         ],
-        "moduleConfig": {
-            "text2vec-transformers": {
-            "skip": true,
-            "vectorizePropertyName": false
-            }
-        },
-        "description": "text property for document",
-        },
-     ]
+        ]
+    }
+]
+
 }
 
 client
