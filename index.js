@@ -93,7 +93,7 @@ var classObj = {
             },
             {
                 "dataType": [
-                    "Article"
+                    "Articles"
                 ],
                 "description": "Article this paragraph is in",
                 "name": "inArticle",
